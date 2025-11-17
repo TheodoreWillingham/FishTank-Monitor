@@ -1,70 +1,76 @@
 @import "tailwindcss";
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@theme {
+  /* colors */
+  --color-border: rgb(var(--border));
+  --color-background: rgb(var(--background));
+  --color-foreground: rgb(var(--foreground));
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  --color-primary: rgb(var(--primary));
+  --color-secondary: rgb(var(--secondary));
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  --color-card: rgb(var(--card));
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+  /* animations */
+  --animate-fade-in: fade-in 0.7s ease-in-out;
+  --animate-slide-up: slide-up 0.7s ease-in-out;
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  @keyframes fade-in {
+    from { opacity: 0; },
+    to { opacity: 1; }
+  }
+
+  @keyframes slide-up {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
+@layer base {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    /* RGB equivalents of your hex colors */
+    --background: 6, 24, 38;      /* #061826 */
+    --foreground: 243, 249, 247;  /* #F3F9F7 */
+    --primary: 137, 170, 230;        /* #89AAE6 */
+    --border: 4, 113, 166;        /* #0471A6 */
+    --secondary: 172, 128, 160;     /* #AC80A0 */
+    --card: 28, 78, 112;    /* #2E8C92 */
   }
-  a:hover {
-    color: #747bff;
+
+  * {
+    @apply border-border;
   }
-  button {
-    background-color: #f9f9f9;
+
+  html {
+    @apply scroll-smooth;
   }
+
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+
+  @media (width >= 640px) { max-width: 640px; }
+  @media (width >= 768px) { max-width: 768px; }
+  @media (width >= 1024px) { max-width: 1024px; }
+  @media (width >= 1280px) { max-width: 1280px; }
+  @media (width >= 1400px) { max-width: 1400px; } 
+}
+
+@utility ocean-button {
+  @apply px-6 py-2 rounded-full bg-secondary text-foreground font-medium
+         transition-all duration-300 hover:shadow-[0_0_10px_rgba(46,140,146,0.5)]
+         hover:scale-105 active:scale-95;
+}
+
+#root {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
 }
