@@ -42,7 +42,7 @@ export const Dashboard = () => {
     };
   }, []);
 
-  const waterChange = 10; //days since waterChange
+  const waterChange = 11; //days since waterChange
   const timeOfDay = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/New_York", // GMT-5 for part of the year
     hour: "numeric",
