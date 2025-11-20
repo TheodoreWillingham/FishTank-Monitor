@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../supabase";
-import { useEffect } from "react";
+
 
 export const Dashboard = () => {
   const [tankReading, setTankReading] = useState(null);
