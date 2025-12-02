@@ -40,7 +40,7 @@ export const TempGraph = () => {
 
     // Realtime subscription
     const channel = supabase
-      .channel("realtime:tank_readings")
+      .channel(`tempGraph-${crypto.randomUUID()}`)
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "tank_readings" },
@@ -131,6 +131,7 @@ export const TempGraph = () => {
                 stroke="rgb(var(--primary))"
                 strokeWidth={2}
                 dot={false}
+                animateNewValues={false}
               />
             </LineChart>
           </ResponsiveContainer>
