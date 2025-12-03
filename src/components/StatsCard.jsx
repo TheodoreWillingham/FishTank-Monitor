@@ -4,6 +4,8 @@ import { supabase } from "../supabase";
 export const StatsCard = () => {
   const [tankReading, setTankReading] = useState(null);
 
+
+
   // tries to get reading from supabase
   const getReading = async () => {
     const { data, error } = await supabase

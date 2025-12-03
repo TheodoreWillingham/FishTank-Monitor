@@ -96,45 +96,79 @@ export const TempGraph = () => {
           )}
         </h3>
         <div className="w-full h-64">
-          <ResponsiveContainer width="100%" height={256}>
-            <LineChart
-              key={history.length} // Force re-render when data changes
-              data={graphData}
-              margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
-            >
-              <CartesianGrid
-                stroke="rgba(137,170,230,0.2)"
-                strokeDasharray="3 3"
-              />
-              <XAxis
-                dataKey="time"
-                stroke="rgb(var(--primary))"
-                tick={{ fontSize: 12, fill: "rgb(var(--foreground))" }}
-                interval={Math.floor(graphData.length / 10)}
-              />
-              <YAxis
-                stroke="rgb(var(--primary))"
-                tick={{ fontSize: 12, fill: "rgb(var(--foreground))" }}
-                tickFormatter={(value) => value.toFixed(2)}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "rgb(var(--card))",
-                  borderRadius: "8px",
-                  color: "rgb(var(--foreground))",
-                }}
-                labelStyle={{ color: "rgb(var(--primary))" }}
-              />
-              <Line
-                type="monotone"
-                dataKey="temp"
-                stroke="rgb(var(--primary))"
-                strokeWidth={2}
-                dot={false}
-                animateNewValues={false}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          {/*
+            Dynamically adjust XAxis interval for mobile/tablet/desktop.
+            Fewer labels on small screens for readability.
+          */}
+          {(() => {
+            // Allow the interval logic to run inside JSX
+            // You can move this outside the render for optimization, if needed.
+            let interval;
+            const graphLen = graphData.length;
+
+            // Determine screen width using window.matchMedia
+            let isMobile = false;
+            let isTablet = false;
+            if (typeof window !== "undefined" && window.matchMedia) {
+              isMobile = window.matchMedia("(max-width: 640px)").matches;
+              isTablet = window.matchMedia(
+                "(min-width: 641px) and (max-width: 1023px)"
+              ).matches;
+            }
+
+            if (isMobile) {
+              // Fewer labels for mobile
+              interval = Math.max(1, Math.floor(graphLen / 4));
+            } else if (isTablet) {
+              // Some more labels for tablets
+              interval = Math.max(1, Math.floor(graphLen / 7));
+            } else {
+              // default to desktop density
+              interval = Math.max(1, Math.floor(graphLen / 10));
+            }
+
+            return (
+              <ResponsiveContainer width="100%" height={256}>
+                <LineChart
+                  key={history.length} // Force re-render when data changes
+                  data={graphData}
+                  margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
+                >
+                  <CartesianGrid
+                    stroke="rgba(137,170,230,0.2)"
+                    strokeDasharray="3 3"
+                  />
+                  <XAxis
+                    dataKey="time"
+                    stroke="rgb(var(--primary))"
+                    tick={{ fontSize: 12, fill: "rgb(var(--foreground))" }}
+                    interval={interval}
+                  />
+                  <YAxis
+                    stroke="rgb(var(--primary))"
+                    tick={{ fontSize: 12, fill: "rgb(var(--foreground))" }}
+                    tickFormatter={(value) => value.toFixed(2)}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "rgb(var(--card))",
+                      borderRadius: "8px",
+                      color: "rgb(var(--foreground))",
+                    }}
+                    labelStyle={{ color: "rgb(var(--primary))" }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="temp"
+                    stroke="rgb(var(--primary))"
+                    strokeWidth={2}
+                    dot={false}
+                    isAnimationActive={false}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            );
+          })()}
         </div>
       </div>
     </div>
