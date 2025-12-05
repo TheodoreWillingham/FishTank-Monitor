@@ -1,6 +1,6 @@
 import { IntroSection } from "../components/IntroSection"
 import { NavBar } from "../components/NavBar"
-
+import { Architecture } from "../components/Architecture"
 import { DashBoard } from "../components/Dashboard"
 
 
@@ -12,11 +12,11 @@ export const Home = () => {
         {/* Intro */}
         <IntroSection />
 
-
         {/* FishTank DashBoard */}
         <DashBoard />
 
-        
+        {/* Architecture */}
+        <Architecture />
 
         {/* Fishtank Inhabitants */}
 

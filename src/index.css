@@ -63,8 +63,8 @@
 }
 
 @utility ocean-button {
-  @apply px-6 py-2 rounded-full bg-secondary text-foreground font-medium
-         transition-all duration-300 hover:shadow-[0_0_10px_rgba(46,140,146,0.5)]
+  @apply px-6 py-2 rounded-full bg-primary text-foreground font-medium
+         transition-all duration-300 hover:shadow-[0_0_10px_rgba(137,170,230,0.3)]
          hover:scale-105 active:scale-95;
 }
 
