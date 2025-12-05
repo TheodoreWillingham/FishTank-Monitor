@@ -75,7 +75,7 @@ export const StatsCard = () => {
                   minute: "2-digit",
                   second: "2-digit",
                 })
-              : "wtf"}
+              : "Full"}
           </p>
         </div>
       </div>

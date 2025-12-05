@@ -81,7 +81,7 @@ export const Architecture = () => {
           <div className="flex flex-row flex-wrap gap-4 justify-center">
             <figure className="w-32 md:w-36 flex flex-col items-center">
               <img
-                src="src/assets/download.jpg"
+                src="assets/download.jpg"
                 alt="Water Temperature Sensor (DS18B20)"
                 className="rounded-lg shadow border border-border w-full object-cover"
               />
@@ -91,8 +91,8 @@ export const Architecture = () => {
             </figure>
             <figure className="w-32 md:w-36 flex flex-col items-center">
               <img
-                src="src/assets/download.jpg"
-                alt="pH Sensor"
+                src="assets/download.jpg"
+                alt="Capacitve Water Level Sensor (XKC-Y25)"
                 className="rounded-lg shadow border border-border w-full object-cover"
               />
               <figcaption className="text-xs text-center mt-1 text-foreground/70">
@@ -101,7 +101,7 @@ export const Architecture = () => {
             </figure>
             <figure className="w-32 md:w-36 flex flex-col items-center">
               <img
-                src="src/assets/download.jpg"
+                src="assets/download.jpg"
                 alt="ESP32 Microcontroller"
                 className="rounded-lg shadow border border-border w-full object-cover"
               />
