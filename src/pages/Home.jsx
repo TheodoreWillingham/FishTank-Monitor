@@ -2,6 +2,7 @@ import { IntroSection } from "../components/IntroSection"
 import { NavBar } from "../components/NavBar"
 import { Architecture } from "../components/Architecture"
 import { DashBoard } from "../components/Dashboard"
+import { Inhabitants } from "../components/Inhabitants"
 
 
 export const Home = () => {
@@ -15,6 +16,9 @@ export const Home = () => {
         {/* FishTank DashBoard */}
         <DashBoard />
 
+        {/* Inhabitants */}
+        <Inhabitants />
+        
         {/* Architecture */}
         <Architecture />
 
