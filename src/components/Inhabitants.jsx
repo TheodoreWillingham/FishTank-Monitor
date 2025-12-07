@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 
 // Example Inhabitants Data Array
 const inhabitants = [
@@ -302,6 +302,62 @@ const InhabitantCardCarousel = ({
 }) => {
   const isSmallScreen = useIsSmallScreen();
   const inhabitant = inhabitants[current];
+  const imgRef = useRef(null);
+  const [imageLoaded, setImageLoaded] = useState(() => {
+    // Check if image is already cached on initial mount
+    const testImg = new Image();
+    testImg.src = inhabitant.image;
+    return testImg.complete || false;
+  });
+  const currentImageSrcRef = useRef(inhabitant.image);
+
+  // Handle image src changes
+  useEffect(() => {
+    const imageSrc = inhabitant.image;
+    
+    // Only process if image actually changed
+    if (currentImageSrcRef.current === imageSrc) {
+      // Same image - just verify it's loaded if img element exists
+      if (imgRef.current && imgRef.current.complete && imgRef.current.src.includes(imageSrc)) {
+        setImageLoaded(true);
+      }
+      return;
+    }
+
+    // Image changed - update ref and check cache
+    currentImageSrcRef.current = imageSrc;
+    
+    const testImg = new Image();
+    testImg.onload = () => setImageLoaded(true);
+    testImg.onerror = () => setImageLoaded(true); // Avoid stuck loading state
+    testImg.src = imageSrc;
+    
+    if (testImg.complete) {
+      setImageLoaded(true);
+    } else {
+      setImageLoaded(false);
+    }
+  }, [inhabitant.image]);
+
+  // Preload adjacent images when current index changes
+  useEffect(() => {
+    if (inhabitants.length === 0) return;
+    
+    const prevIndex = (current - 1 + inhabitants.length) % inhabitants.length;
+    const nextIndex = (current + 1) % inhabitants.length;
+    
+    // Preload in background
+    const prevImg = new Image();
+    prevImg.src = inhabitants[prevIndex].image;
+    
+    const nextImg = new Image();
+    nextImg.src = inhabitants[nextIndex].image;
+  }, [current, inhabitants]);
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
   return (
     <div className="w-full flex flex-col items-center">
       <h3 className="text-2xl font-bold text-accent mt-8 mb-4">{categoryName}</h3>
@@ -334,12 +390,24 @@ const InhabitantCardCarousel = ({
             animation: `fade-in 0.7s both`
           }}
         >
-          <img
-            src={inhabitant.image}
-            alt={inhabitant.name}
-            className="w-full h-52 object-cover rounded-t-xl"
-            loading="lazy"
-          />
+          <div className="relative w-full h-52 bg-card/30 rounded-t-xl">
+            {!imageLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+              </div>
+            )}
+            <img
+              ref={imgRef}
+              src={inhabitant.image}
+              alt={inhabitant.name}
+              className={`w-full h-52 object-cover rounded-t-xl transition-opacity duration-300 ${
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+              loading="eager"
+              onLoad={handleImageLoad}
+              onError={() => setImageLoaded(true)} // Show image even if error to avoid stuck loading
+            />
+          </div>
           <div className="p-5 flex flex-col gap-2">
             <h4 className="text-xl font-semibold text-secondary">{inhabitant.name}</h4>
             <p className="text-sm font-medium text-primary">{inhabitant.species}</p>
@@ -385,11 +453,14 @@ const InhabitantCardCarousel = ({
 };
 
 export const Inhabitants = () => {
-  // Map each category key to its array of inhabitants (filtered)
-  const categoryInhabitants = {};
-  CATEGORIES.forEach(cat => {
-    categoryInhabitants[cat.key] = inhabitants.filter(i => i.category === cat.key);
-  });
+  // Map each category key to its array of inhabitants (filtered) - memoized to prevent re-renders
+  const categoryInhabitants = useMemo(() => {
+    const result = {};
+    CATEGORIES.forEach(cat => {
+      result[cat.key] = inhabitants.filter(i => i.category === cat.key);
+    });
+    return result;
+  }, []);
 
   // One state for each category's carousel index
   const [currents, setCurrents] = useState(
