@@ -10,7 +10,8 @@ export const IntroSection = () => {
           Welcome to Theo's{" "}
           <span className="text-primary"> Fish Tank Monitor </span>. This is a
           personal IoT project I have been working on to help monitor my fish
-          tank while I'm on vacation.
+          tank while I'm on vacation. Say hello to all the lovely inhabitants of
+          Theo's Reef Tank.
         </p>
       </div>
     </section>
